@@ -1,0 +1,10 @@
+FROM node:lts-alpine as build-stage
+
+WORKDIR /var/www/vue-ui
+COPY vue-ui/package*.json ./
+
+RUN npm install
+
+COPY vue-ui/. .
+
+RUN npm run build

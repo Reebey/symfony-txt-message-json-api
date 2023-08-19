@@ -1,8 +1,10 @@
 FROM php:8.2-fpm-buster
 
+WORKDIR /var/www/symfony
+COPY src/ /var/www/symfony
+
 RUN apt-get update && apt-get install -y
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN chown -R www-data:www-data /var/www/symfony
 
-COPY src/ /var/www/symfony
-WORKDIR /var/www/symfony
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

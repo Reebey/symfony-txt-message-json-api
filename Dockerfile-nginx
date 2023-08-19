@@ -1,2 +1,12 @@
-FROM nginx:latest
+FROM node:lts-alpine as build-stage
+WORKDIR /app
+COPY vue-ui/package*.json ./
+RUN npm install
+COPY vue-ui/ .
+RUN npm run build
+
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /static
+COPY --from=build-stage /app/dist /var/www/symfony/public
 COPY ./build/nginx/default.conf /etc/nginx/conf.d

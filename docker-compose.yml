@@ -6,25 +6,24 @@ services:
             context: .
             dockerfile: Dockerfile-php
         environment:
-          APP_ENV: dev
-        volumes:
-            - ./src/:/var/www/symfony
+            APP_ENV: dev
         networks:
-            - symfony
+            symfony:
+                aliases:
+                    - shared-data:/var/www/symfony/public
+
     nginx:
         build:
             context: .
             dockerfile: Dockerfile-nginx
-        volumes:
-            - ./src/:/var/www/symfony
         ports:
             - 8080:80
         networks:
-            - symfony
-
-volumes:
-    symfony_app_var:
-    symfony_app_vendor:
+            symfony:
+                aliases:
+                    - shared-data:/var/www/symfony/public
+        depends_on:
+            - php
 
 networks:
     symfony:
